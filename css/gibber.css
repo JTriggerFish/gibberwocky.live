@@ -20,9 +20,9 @@ body {
   width:35%;
   float:right;
   height:100%;
-  border-left:1px black solid;
+  border-left:1px #999;
   box-sizing:border-box;
-  overflow:scroll;
+  overflow:hidden;
   font-family:sans-serif;
   font-weight:lighter;
   font-size:1em
@@ -179,7 +179,7 @@ span.cm-string {color: rgb(225, 225, 225) !important }
 
 #console { 
   width:100%;
-  overflow:scroll;
+  overflow:hidden;
   height: calc( 100% - 4.5em );
   color:rgb( 153,153,153 ) !important; 
 }
@@ -200,7 +200,7 @@ span.cm-string {color: rgb(225, 225, 225) !important }
   top:0;
   position:absolute;
   height:100%;
-  width:5px;
+  width:1px;
   background:#666;
   cursor: ew-resize
 }
@@ -240,11 +240,12 @@ span.cm-string {color: rgb(225, 225, 225) !important }
 }
 
 .microlib_tabs_nav_item {
-  height:26px;
+  height:23px;
   padding:.5em 5px 0px 5px;
-  line-height:26px;
+  line-height:23px;
   color:white;
-  background:black
+  background: rgba(46,50,53,1);
+  border: 0px;
 }
 .microlib_tabs_nav_item.microlib_active {
   background:rgba(89, 151, 198, .6) !important
@@ -258,7 +259,11 @@ span.cm-string {color: rgb(225, 225, 225) !important }
   text-decoration:underline;
   border:none;
 }
-
+.microlib_tabs_nav_item:hover,
+.microlib_tabs_nav_item.microlib_active {
+    background: rgb(56, 61, 65);
+    cursor: pointer;
+}
 .demos .microlib_tabs_nav_item.microlib_active {
   color:rgba(109, 171, 238, 1) !important;
 }
