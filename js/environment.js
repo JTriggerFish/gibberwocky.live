@@ -3,7 +3,7 @@ let Gibber = null,
     CodeMirror = require( 'codemirror' )
 
 require( '../node_modules/codemirror/mode/javascript/javascript.js' )
-// require( '../node_modules/codemirror/keymap/vim.js' )
+require( '../node_modules/codemirror/keymap/vim.js' )
 //require( '../node_modules/codemirror/addon/edit/matchbrackets.js' )
 require( '../node_modules/codemirror/addon/edit/closebrackets.js' )
 require( '../node_modules/codemirror/addon/hint/show-hint.js' )
@@ -99,7 +99,8 @@ let Environment = {
     CodeMirror.keyMap.gibber = this.keymap
     this.codemirror = CodeMirror( document.querySelector('#editor'), {
       mode:'javascript', 
-      keyMap:'gibber',
+      // keyMap:'gibber',
+      keyMap:'vim',
       autofocus:true, 
       value: Gibber.Examples.live.introduction,
       matchBrackets: true,
@@ -108,6 +109,12 @@ let Environment = {
       //theme:'the-matrix'
     })
     this.codemirror.setSize( null, '100%' ) 
+    this.codeMirror.cmOnKeyPress = this.codemirror.onKeyPress;
+    this.codemirror.onKeyPress = function(e)
+    {
+        console.log(e)
+        this.codemirror.cmOnKeyPress(e)
+    }
   },
 
   createConsole() {
