@@ -105,16 +105,17 @@ let Environment = {
       value: Gibber.Examples.live.introduction,
       matchBrackets: true,
       autoCloseBrackets: true,
-      extraKeys: {"Ctrl-Space": "autocomplete"},
+      // extraKeys: {"Ctrl-Space": "autocomplete"},
       //theme:'the-matrix'
     })
+    this.codemirror.addKeyMap(CodeMirror.keyMap.gibber)
     this.codemirror.setSize( null, '100%' ) 
-    this.codeMirror.cmOnKeyPress = this.codemirror.onKeyPress;
-    this.codemirror.onKeyPress = function(e)
-    {
-        console.log(e)
-        this.codemirror.cmOnKeyPress(e)
-    }
+    // this.codeMirror.cmOnKeyPress = this.codemirror.onKeyPress;
+    // this.codemirror.onKeyPress = function(e)
+    // {
+    //     console.log(e)
+    //     this.codemirror.cmOnKeyPress(e)
+    // }
   },
 
   createConsole() {
@@ -209,7 +210,7 @@ let Environment = {
   },
 
   keymap : {
-    fallthrough:'default',
+    fallthrough:'vim',
 
     // execute now
     'Shift-Enter'(cm) {
@@ -226,6 +227,14 @@ let Environment = {
       }
     },
 
+    'Ctrl-Space'( cm ) {
+      try {
+        CodeMirror.showHint(cm, CodeMirror.hint.html)
+      } catch (e) {
+        console.log( e )
+        Environment.log( 'ERROR', e )
+      }
+    },
     'Ctrl-Enter'( cm ) {
       try {
         const selectedCode = Environment.getSelectionCodeColumn( cm, false )
