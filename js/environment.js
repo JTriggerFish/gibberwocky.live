@@ -42,6 +42,11 @@ let Environment = {
 
     this.setupClockSelection()
     //this.toggleSidebar()
+
+    window.onbeforeunload = function() {
+        let fileContents = Environment.codemirror.getValue()
+        localStorage.setItem('lastfile', fileContents)
+    }
   },
 
   createSidePanel() {
@@ -111,6 +116,12 @@ let Environment = {
     }
 },
   createCodeMirror() {
+
+    let lastcontent = localStorage.getItem('lastfile')
+    if( lastcontent == null || lastcontent == undefined ) {
+        lastcontent = Gibber.Examples.live.introduction
+    }
+
     // CodeMirror.keyMap.vim.push(this.keymap)
     CodeMirror.keyMap.gibber = this.keymap
     this.codemirror = CodeMirror( document.querySelector('#editor'), {
@@ -118,7 +129,7 @@ let Environment = {
       // keyMap:'gibber',
       keyMap:'vim',
       autofocus:true, 
-      value: Gibber.Examples.live.introduction,
+      value: lastcontent,
       matchBrackets: true,
       autoCloseBrackets: true,
       // extraKeys: {"Ctrl-Space": "autocomplete"},
