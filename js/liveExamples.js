@@ -36,10 +36,10 @@ tracks[0].midinote.seq( 60, Euclid(5,8) )
 tracks[0].midinote.seq( [64,65].rnd(), [1/8,1/16].rnd(1/16,2), 1 )
 
 // play a scintillating bass line
-tracks[1].note.seq( [-14,-12,-9,-8], 1/8 )
+tracks[1].note.seq( [-13,-11,-8,-7], 1/8 )
 
 // play chords with piano sound
-tracks[2].chord.seq( Rndi(0,8,3), 2 )
+tracks[2].chord.seq( Rndi(1,9,4), 2 )
 
 // control bass filter cutoff
 tracks[1].devices[0]['Filter Freq']( mul( beats(2), .75 ) )   
@@ -217,14 +217,14 @@ bass.note.seq( ['c2','e2','g2'], 1/8 )
 // remember, Ctrl+. (or clear()) stops all running sequences.
 
 // In gibberwocky, the default scale employed is C minor, starting in the fourth octave. 
-// This means that if we pass 0 as a value to note(), C4 will also be played.
-bass.note( 0 )
+// This means that if we pass 1 as a value to note(), C4 will also be played.
+bass.note( 1 )
 
 // sequence C minor scale, starting in the fourth octave:
-bass.note.seq( [0,1,2,3,4,5,6,7], 1/8 )
+bass.note.seq( [1,2,3,4,5,6,7,8], 1/8 )
 
 // negative scale indices also work:
-bass.note.seq( [-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7], 1/8 )
+bass.note.seq( [-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8], 1/8 )
 
 // there is a global Scale object we can use to change the root and mode
 // for all scales. Run the lines below individually  with the previous note sequence running.
@@ -243,7 +243,7 @@ Scale.root[0].stop()
 Scale.mode[0].stop()
 Scale.root( 'c4' )
 
-// We can also define our own scales using chromatic scale indices. Unfortunately, 
+// We can also define our own scales using chromatic scale indices ( starting at zero ). Unfortunately, 
 // microtuning with MIDI is very diffcult, so only the standard eleven notes of 
 // Western harmony are supported. Scales can have arbtrary numbers of notes.
 Scale.modes[ 'my mode' ] = [ 0,1,2,3,5,6,10 ]
@@ -264,10 +264,10 @@ pad = tracks[2]
 pad.chord( ['c4','eb4','gb4','a4'] )
 
 // Or we can use scale indices:
-pad.chord( [0,2,4,5] )
+pad.chord( [1,3,5,6] )
 
 // sequence in two-dimensional array
-pad.chord.seq( [[0,2,4,5], [1,3,4,6]], 1 )
+pad.chord.seq( [[1,3,5,6], [2,4,5,7]], 1 )
 
 // We can also use strings that identify common chord names.
 pad.chord( 'c4maj7' )
@@ -419,7 +419,7 @@ bass.midinote.seq( ()=> rndi(0,127), 1/8 )
 // Simply capitalize the call to rndi or rndf (to Rndi / Rndf ).
 
 clear() // clear previous sequence
-bass.note.seq( Rndi(-14,-7), 1/8 )
+bass.note.seq( Rndi(-13,-6), 1/8 )
 
 // Note that the code annotations show the final outputted MIDI note
 // value, as opposed to the initial random number.
@@ -427,7 +427,7 @@ bass.note.seq( Rndi(-14,-7), 1/8 )
 // And chords:
 clear()
 pad = tracks[2]
-pad.chord.seq( Rndi(14,21,3), 1 )
+pad.chord.seq( Rndi(15,22,4), 1 )
 
 // In addition to creating functions outputting random numbers, we can
 // also randomly pick from the arrays used to initialize patterns.
@@ -446,11 +446,11 @@ drums.midinote.seq( [64,65].rnd(), 1/16 )
 drums.midinote.seq( 60, 1/4 )
 
 // whenever a 1/16th timing is used, use it twice in a row
-bass.note.seq( -14, [1/8,1/16].rnd( 1/16,2 ) )
+bass.note.seq( -13, [1/8,1/16].rnd( 1/16,2 ) )
 
 // whenever a 1/16th timing is used, use it twice in a row and
 // whenever a 1/12th timing is used, use it three times in a row
-bass.note.seq( -14, [1/8,1/16,1/12].rnd( 1/16,2,1/12,3 ) )
+bass.note.seq( -13, [1/8,1/16,1/12].rnd( 1/16,2,1/12,3 ) )
 
 // OK, that's the basics of using randomness in patterns. But we can also use
 // noise to create randomness in modulations.
@@ -485,12 +485,12 @@ drums.devices[0]['Global Time']( sah( cycle(2), noise(), .999 ) )
 bass = tracks[1]
 
 s = Score([
-  0, ()=> bass.note.seq( -14, 1/4 ),
+  0, ()=> bass.note.seq( -13, 1/4 ),
  
-  1, ()=> bass.note.seq( 0, Euclid(5,8) ),
+  1, ()=> bass.note.seq( 1, Euclid(5,8) ),
  
   2, ()=> {
-    arp = Arp( [0,1,3,5], 3, 'updown2' )
+    arp = Arp( [1,2,4,6], 3, 'updown2' )
     bass.note.seq( arp, 1/32 )
   },
  
@@ -502,13 +502,13 @@ s = Score([
 // Scores can also be stopped automatically to await manual retriggering.
 
 s2 = Score([
-  0,   ()=> bass.note( 0 ),
+  0,   ()=> bass.note( 1 ),
 
-  1/2, ()=> bass.note( 1 ),
+  1/2, ()=> bass.note( 2 ),
 
   Score.wait, null,
 
-  0,   ()=> bass.note( 2 )
+  0,   ()=> bass.note( 3 )
 ])
 
 // restart playback
@@ -519,9 +519,9 @@ s2.next()
  * an amount of time to wait between the end of one loop and the start of the next.*/
 
 s3 = Score([
-  0, ()=> bass.note.seq( 0, 1/4 ),
-  1, ()=> bass.note.seq( [0,7], 1/8 ),
-  1, ()=> bass.note.seq( [0, 7, 14], 1/12 )
+  0, ()=> bass.note.seq( 1, 1/4 ),
+  1, ()=> bass.note.seq( [1,8], 1/8 ),
+  1, ()=> bass.note.seq( [1, 8, 15], 1/12 )
 ])
 
 s3.loop( 1 )
@@ -542,7 +542,7 @@ s3.loop( 1 )
 bass = tracks[1]
 
 // Make an arp: chord, number of octaves, mode.
-myarp = Arp( [0,2,4,5], 4, 'updown' )
+myarp = Arp( [1,3,5,6], 4, 'updown' )
 
 // other modes include 'up' and 'down'. XXX updown2 is broken :( 
 
@@ -695,19 +695,19 @@ steps.reverse.seq( 1, 2 )`,
 
 // assumes that you have a melodic instrument loaded on track 1
 tracks[1].note.seq(
-  sine( 4, 0, 4 ), // period (in beats), center, amplitude
+  sine( 4, 1, 4 ), // period (in beats), center, amplitude
   1/8
 )
 
 tracks[1].octave(-2)
 
 // as you can see from the visualization, this creates a sine oscillator
-// with a period of 4 beats, an amplitude of 4 and a center (bias) of 0.
+// with a period of 4 beats, an amplitude of 4 and a center (bias) of 1.
 // sine() is a convenience method in gibberwocky; we could recreate this
 // waveform using low-level Gen/genish functions:
 
 tracks[1].note.seq(
-  mul( cycle( btof(4) ), 4 ),
+  add( mul( cycle( btof(4) ), 4 ), 1),
   1/8
 )
 
@@ -719,7 +719,7 @@ tracks[1].note.seq(
 
 // of course we can use a pattern for our rhythm:
 tracks[1].note.seq(
-  sine( 8, 0, 7 ),
+  sine( 8, 1, 7 ),
   Euclid(5,16),
   1
 )
@@ -730,7 +730,7 @@ tracks[1].note[1].timings.rotate.seq( 1,1 )
 // For example, in the sequence below the pattern alternates between
 // 1/16, 1/8, and 1/4 notes based on a phasor:
 tracks[1].note.seq(
-  0, 
+  1, 
   Lookup( beats(4), [1/16,1/8,1/4] )              
 )
 
@@ -756,7 +756,7 @@ tracks[0].velocity.seq( sine( 4, 48, 48 ) )
 
 // assumes that tracks[0] contains an impulse:
 tracks[0].note.seq(
-  sine( 8, 4, 4 ),
+  sine( 8, 5, 4 ),
   1/16
 )`,
 

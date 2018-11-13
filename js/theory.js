@@ -187,11 +187,17 @@ let Scale = {
     return scale
   },
 
-  getMIDINumber( scaleDegree ) {
+  getMIDINumber( onebased_scaleDegree ) {
+    //FastTriggerFish
+    // in a musical context I think it makes more sense that notes start at one
+    //i.e 1 is root, 3 is third, 8 is octave etc
+    scaleDegree = onebased_scaleDegree -1
     let mode   = this.modeNumbers,
         isNegative = scaleDegree < 0,
         octave = Math.floor( scaleDegree / mode.length ),
-        degree = isNegative ? mode[ Math.abs( mode.length + (scaleDegree % mode.length ) )   ] : mode[ scaleDegree % mode.length ],
+        degree = isNegative ?
+          mode[Math.abs(mode.length + (scaleDegree % mode.length))]
+          : mode[scaleDegree % mode.length],
         out
 
     if( degree === undefined ) degree = 0
