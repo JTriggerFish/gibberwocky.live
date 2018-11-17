@@ -31,17 +31,19 @@ let Scheduler = {
   },
 
   sync( mode = 'internal' ) {
-    const tempSync = this.__sync__
+    // const tempSync = this.__sync__
+    const tempSync = true;
 
     this.__sync__ = mode// === 'internal' 
 
     if( this.__sync__ === 'internal' ) {
       if( tempSync === true ) {
+        this.animationSchedulerInitialized = false
         this.run()
       }
     }else{
       if( tempSync === false ) {
-        this.animationClockInitialized = false
+        this.animationSchedulerInitialized = false
       }
     }
 
@@ -52,6 +54,8 @@ let Scheduler = {
     Gibber = __Gibber
     const sync = localStorage.getItem( 'sync' )
 
+    this.animationScheduler = Gibber.Environment.animationScheduler
+
     if( sync !== null && sync !== undefined ) { 
       this.sync( sync )
       switch( sync ) {
@@ -61,22 +65,20 @@ let Scheduler = {
         case 'max':      document.querySelector('#maxSyncRadio').setAttribute( 'checked', true ); break;
       }
     }else{
-      this.sync( 'max' )
+      this.sync( 'live' )
     }
-
-    this.animationClock = Gibber.Environment.animationClock
   },
 
   run() {
-    if( this.animationClockInitialized === false ) {
-      this.animationClock.add( this.animationClockCallback, 0 )
+    if( this.animationSchedulerInitialized === false ) {
+      this.animationScheduler.add( this.animationSchedulerCallback.bind(this), 0 )
     }
   },
 
-  animationClockCallback( time ) {
-    if( this.animationClockInitialized === false ) {
+  animationSchedulerCallback( time ) {
+    if( this.animationSchedulerInitialized === false ) {
       this.animationOffset = this.lastBeat = time
-      this.animationClockInitialized = true
+      this.animationSchedulerInitialized = true
     }
     
     this.beatCallback( time )
@@ -91,7 +93,7 @@ let Scheduler = {
     }
 
     if( this.__sync__ === false ) {
-      this.animationClock.add( this.beatCallback, 1 )
+      this.animationScheduler.add( this.beatCallback, 1 )
     }
   },
 
