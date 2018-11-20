@@ -92,8 +92,8 @@ let Scheduler = {
       this.lastBeat = time - (timeDiff - oneBeat) // preserve phase remainder
     }
 
-    if( this.__sync__ === false ) {
-      this.animationScheduler.add( this.beatCallback, 1 )
+    if( this.__sync__ === "internal") {
+      this.animationScheduler.add( this.beatCallback.bind(this), 1 )
     }
   },
 

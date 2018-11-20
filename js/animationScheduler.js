@@ -29,7 +29,7 @@ let Scheduler = {
   runSoon( evt ) {
     
     try{
-      evt.func()
+      evt.func(evt.time)
     }catch(e) {
       console.log( 'annotation error:', e.toString() )
     }
