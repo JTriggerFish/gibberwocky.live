@@ -88,7 +88,7 @@ let Scheduler = {
     const timeDiff = time - this.lastBeat
     const oneBeat = (60 / this.bpm) * 1000 
     if( timeDiff >= oneBeat ) {
-      this.advanceBeat()
+      this.advance(1, (this.currentBeat % 4) + 1)
       this.lastBeat = time - (timeDiff - oneBeat) // preserve phase remainder
     }
 
